@@ -2,6 +2,7 @@ import trax
 
 from trax.supervised import training
 from trax import layers as tl
+import numpy as np
 
 # Create Named entity recognition model
 
@@ -24,3 +25,29 @@ def NER(tags, vocab_size=35181, d_model=50):
       ) 
 
     return model
+
+def initialize_model(tag_map,path):
+    # initializing your model
+    model = NER(tag_map)
+    # display your model
+    print(model)
+    model.init(trax.shapes.ShapeDtype((1, 1), dtype=np.int32))
+
+    # Load the pretrained model
+    model.init_from_file(path, weights_only=True)
+
+
+def predict(sentence, model, vocab, tag_map):
+    s = [vocab[token] if token in vocab else vocab['UNK'] for token in sentence.split(' ')]
+    batch_data = np.ones((1, len(s)))
+    batch_data[0][:] = s
+    sentence = np.array(batch_data).astype(int)
+    output = model(sentence)
+    outputs = np.argmax(output, axis=2)
+    labels = list(tag_map.keys())
+    pred = []
+    for i in range(len(outputs[0])):
+        idx = outputs[0][i] 
+        pred_label = labels[idx]
+        pred.append(pred_label)
+    return pred
