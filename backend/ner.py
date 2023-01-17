@@ -36,6 +36,8 @@ def initialize_model(tag_map,path):
     # Load the pretrained model
     model.init_from_file(path, weights_only=True)
 
+    return model
+
 
 def predict(sentence, model, vocab, tag_map):
     s = [vocab[token] if token in vocab else vocab['UNK'] for token in sentence.split(' ')]
@@ -51,3 +53,18 @@ def predict(sentence, model, vocab, tag_map):
         pred_label = labels[idx]
         pred.append(pred_label)
     return pred
+
+
+def get_vocab(vocab_path, tags_path):
+    vocab = {}
+    with open(vocab_path) as f:
+        for i, l in enumerate(f.read().splitlines()):
+            vocab[l] = i  # to avoid the 0
+        # loading tags (we require this to map tags to their indices)
+    vocab['<PAD>'] = len(vocab) # 35180
+    tag_map = {}
+    with open(tags_path) as f:
+        for i, t in enumerate(f.read().splitlines()):
+            tag_map[t] = i 
+    
+    return vocab, tag_map
