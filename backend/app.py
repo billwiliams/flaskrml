@@ -20,6 +20,9 @@ def named_entity_recognition():
     model=initialize_model(tags,"./models/ner/model.pkl.gz")
     sentence=statement
     preds=predict(sentence, model, vocab, tags)
+    predictions={}
+    for index,pred in enumerate(preds):
+        predictions[sentence.split(' ')[index]]=pred
 
-    return jsonify(zip(sentence,preds))
+    return jsonify(predictions)
     
