@@ -68,3 +68,8 @@ def get_vocab(vocab_path, tags_path):
             tag_map[t] = i 
     
     return vocab, tag_map
+
+vocab,tags=get_vocab("./models/ner/words.txt","./models/ner/tags.txt")
+model=initialize_model(tags,"./models/ner/model.pkl.gz")
+sentence="Wilson is a happy boy in kenya"
+print(predict(sentence, model, vocab, tags))
