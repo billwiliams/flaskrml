@@ -1,4 +1,5 @@
 from flask import Flask,jsonify,request
+from ner import get_vocab,initialize_model,predict
 
 
 app = Flask(__name__)
@@ -15,4 +16,10 @@ def named_entity_recognition():
     #prepare the questions
 
     # infer the questions if same from the siamese Model
+    vocab,tags=get_vocab("./models/ner/words.txt","./models/ner/tags.txt")
+    model=initialize_model(tags,"./models/ner/model.pkl.gz")
+    sentence=statement
+    preds=predict(sentence, model, vocab, tags)
+
+    return jsonify(zip(sentence,preds))
     
