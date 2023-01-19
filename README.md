@@ -28,3 +28,18 @@ pip install -r requirements.txt
 
 - [jax](https://jax.readthedocs.io/en/latest/notebooks/quickstart.html) JAX is NumPy on the CPU, GPU, and TPU, with great automatic differentiation for high-performance machine learning research.
 
+### Run the Server
+
+
+#### Backend
+To run the application navigate to the backend folder and  run the following commands: 
+```
+export FLASK_APP=app
+export FLASK_ENV=development
+flask run
+```
+
+These commands put the application in development and directs our application to use the `__init__.py` file in our flaskr folder. Working in development mode shows an interactive debugger in the console and restarts the server whenever changes are made. If running locally on Windows, look for the commands in the [Flask documentation](http://flask.pocoo.org/docs/1.0/tutorial/factory/).
+
+The application is run on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration. 
+
