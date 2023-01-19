@@ -43,3 +43,29 @@ These commands put the application in development and directs our application to
 
 The application is run on `http://127.0.0.1:5000/` by default and is a proxy in the frontend configuration. 
 
+## API Reference
+
+### Getting Started
+- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, `http://127.0.0.1:5000/`, which is set as a proxy in the frontend configuration. 
+- Authentication: This version of the application does not require authentication or API keys. 
+
+### Error Handling
+Errors are returned as JSON objects in the following format:
+```
+{
+    "success": False, 
+    "error": 400,
+    "message": "bad request"
+}
+```
+The API will return three error types when requests fail:
+- 400: bad request
+- 404: resource not found
+- 422: not processable 
+- 405: method not allowed
+- 500: Internal server error
+
+### Endpoints 
+
+#### `GET '/categories'`
+
