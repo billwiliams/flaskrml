@@ -67,5 +67,15 @@ The API will return three error types when requests fail:
 
 ### Endpoints 
 
-#### `GET '/categories'`
+#### `POST'/ner'`
+
+- Request Arguments: a json object with statement to find named entities . 
+- Returns: success value
+- `curl http://127.0.0.1:5000/ner -X POST -H "Content-Type: application/json" -d d '{"statement":"The nightlife in Colombia is great as per  Kenyans based in Bogota NewYork"}'`
+``` json
+{
+  {"data":{"":"O","Bogota":"B-geo","Colombia":"B-geo","Kenyans":"O","NewYork":"I-geo","The":"O","as":"O","based":"O","great":"O","in":"O","is":"O","nightlife":"O","per":"O"},
+  "success":true}
+}
+```
 
