@@ -3,9 +3,11 @@ from ner import get_vocab,initialize_model,predict
 from errors import errors
 
 
-
+# create the falsk app
 def create_app():
     app = Flask(__name__)
+    
+    # register errors
     app.register_blueprint(errors)
     return app
 app=create_app()
