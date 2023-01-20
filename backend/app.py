@@ -1,8 +1,14 @@
 from flask import Flask,jsonify,request
 from ner import get_vocab,initialize_model,predict
+from errors import errors
 
 
-app = Flask(__name__)
+
+def create_app():
+    app = Flask(__name__)
+    app.register_blueprint(errors)
+    return app
+app=create_app()
 
 @app.route("/")
 def hello_world():
