@@ -29,6 +29,8 @@ def named_entity_recognition():
     predictions={}
     for index,pred in enumerate(preds):
         predictions[sentence.split(' ')[index]]=pred
+    
 
-    return jsonify(predictions)
+    return jsonify({"data":predictions,
+    'success': True})
     
