@@ -83,12 +83,59 @@ def process_tweet(tweet):
             tweets_clean.append(stem_word)
     
     return tweets_clean
+
+
+def tweet_to_tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
+    '''
+    Input: 
+        tweet - A string containing a tweet
+        vocab_dict - The words dictionary
+        unk_token - The special string for unknown tokens
+        verbose - Print info durign runtime
+    Output:
+        tensor_l - A python list with
+        
+    '''     
+   
+    # Process the tweet into a list of words
+    # where only important words are kept (stop words removed)
+    word_l = process_tweet(tweet)
+    
+    if verbose:
+        print("List of words from the processed tweet:")
+        print(word_l)
+        
+    # Initialize the list that will contain the unique integer IDs of each word
+    tensor_l = [] 
+    
+    # Get the unique integer ID of the __UNK__ token
+     
+
+    unk_ID = vocab_dict[unk_token]
+    
+    if verbose:
+        print(f"The unique integer ID for the unk_token is {unk_ID}")
+        
+    # for each word in the list:
+    for word in word_l:
+        
+        # Get the unique integer ID.
+        # If the word doesn't exist in the vocab dictionary,
+        # use the unique ID for __UNK__ instead.
+        word_ID = vocab_dict.get(word,unk_ID)
+    
+        # Append the unique integer ID to the tensor list.
+        tensor_l.append(word_ID)
+   
+    return tensor_l
 model=classifier()
 # model.init(trax.shapes.ShapeDtype((1, 1), dtype=np.int32))
 model.init_from_file("./models/sentiment/model.pkl.gz", weights_only=True)
 # print(model([1,0,0,1]))
 
 print(process_tweet('AM happy asf'))
+
+
 
 
 
