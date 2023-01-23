@@ -129,9 +129,9 @@ def tweet_to_tensor(tweet, vocab_dict, unk_token='__UNK__', verbose=False):
    
     return tensor_l
 model=classifier()
-# model.init(trax.shapes.ShapeDtype((1, 1), dtype=np.int32))
+model.init(trax.shapes.ShapeDtype((1, 1), dtype=np.int32))
 model.init_from_file("./models/sentiment/model.pkl.gz", weights_only=True)
-# print(model([1,0,0,1]))
+print(model(np.ones(shape=(256),dtype=np.int32)))
 
 print(process_tweet('AM happy asf'))
 
