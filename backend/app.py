@@ -11,9 +11,9 @@ def create_app():
     return app
 app=create_app()
 
-@app.route("/")
-def hello_world():
-    return "<p>Hello, World!</p>"
+@app.route("/", methods=['POST','GET'])
+def health():
+    return jsonify("Healthy")
 
 @app.route('/ner', methods=['POST'])
 def named_entity_recognition():
