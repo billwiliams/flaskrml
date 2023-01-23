@@ -1,6 +1,7 @@
 from flask import Flask,jsonify,request
 from ner import get_vocab,initialize_model,predict
 from errors import errors
+from sentiment import classifier
 
 
 
@@ -33,4 +34,7 @@ def named_entity_recognition():
 
     return jsonify({"data":predictions,
     'success': True})
+
+
+
     
