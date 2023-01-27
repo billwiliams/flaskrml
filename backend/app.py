@@ -2,6 +2,7 @@ from flask import Flask,jsonify,request
 from ner import get_vocab,initialize_model,predict
 from errors import errors
 from sentiment import classifier
+from siamese import * 
 
 
 
@@ -33,6 +34,27 @@ def named_entity_recognition():
     
 
     return jsonify({"data":predictions,
+    'success': True})
+
+@app.route('/siamese',methods=['POST'])
+
+def similar():
+    body = request.get_json()
+
+    statement_one= body.get("statement_one", None)
+    statement_two= body.get("statement_two", None)
+    #prepare the questions
+
+    model=Siamese()
+
+    model.init_from_file("./models/siamese/model.pkl.gz")
+    #print(model(np.ones(shape=(256),dtype=np.int32)))
+    with open('./models/siamese/vocab.pkl', 'rb') as f:
+        vocab = pickle.load(f)
+
+    prediction=predict(statement_one,statement_two,0.7, model, vocab, data_generator=data_generator, verbose=False)
+
+    return  jsonify({"simila":prediction,
     'success': True})
 
 
