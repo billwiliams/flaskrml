@@ -103,7 +103,7 @@ def Siamese(vocab_size=41699, d_model=128, mode='train'):
     model = tl.Parallel(q_processor, q_processor)
     return model
 
-def predict(question1, question2, threshold, model, vocab, data_generator=data_generator, verbose=False):
+def predict(question1, question2, threshold, model, vocab, data_generator=data_generator, verbose=True):
     """Function for predicting if two questions are duplicates.
     Args:
         question1 (str): First question.
