@@ -3,6 +3,10 @@ from trax import layers as tl
 from trax.supervised import training
 from trax.fastmath import numpy as fastnp
 import numpy as np
+import pandas as pd
+import random as rnd
+import pickle
+import nltk
 
 
 def data_generator(Q1, Q2, batch_size, pad=1, shuffle=True):
@@ -149,3 +153,10 @@ def predict(question1, question2, threshold, model, vocab, data_generator=data_g
     return res                              
 
 model=Siamese()
+
+model.init_from_file("./models/siamese/model.pkl.gz")
+#print(model(np.ones(shape=(256),dtype=np.int32)))
+with open('./models/siamese/vocab.pkl', 'rb') as f:
+    vocab = pickle.load(f)
+
+print(predict('AM happy ','Am well',0.7, model, vocab, data_generator=data_generator, verbose=False))
