@@ -142,6 +142,7 @@ def predict(question1, question2, threshold, model, vocab, data_generator=data_g
     # take dot product to compute cos similarity of each pair of entries, v1, v2
     # don't forget to transpose the second argument
     d = fastnp.dot(v1,v2.T)
+    print(d)
     # is d greater than the threshold?
     res = d> threshold
     

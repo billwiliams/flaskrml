@@ -47,12 +47,12 @@ def similar():
 
     model=Siamese()
 
-    model.init_from_file("./models/siamese/model.pkl.gz", weights_only=True)
+    model.init_from_file("./models/siamese/model.pkl.gz")
     #print(model(np.ones(shape=(256),dtype=np.int32)))
     with open('./models/siamese/vocab.pkl', 'rb') as f:
         vocab = pickle.load(f)
 
-    prediction=predict(statement_one,statement_two,0.9, model, vocab, data_generator=data_generator, verbose=False)
+    prediction=predict(statement_one,statement_two,0.96, model, vocab, data_generator=data_generator, verbose=False)
     print(prediction[0][0])
     return  jsonify({"similar":str(prediction[0][0]),
     'success': True})
