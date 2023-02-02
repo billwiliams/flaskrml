@@ -79,3 +79,14 @@ The API will return three error types when requests fail:
 }
 ```
 
+#### `POST'/siamese'`
+
+- Request Arguments: a json object with statement_one and statement_two to determine if the statements are similar. 
+- Returns: success value
+- `curl http://127.0.0.1:5000/siamese -X POST -H "Content-Type: application/json" -d '{"statement_one":"MIT is good","statement_two":"highschool"}'`
+
+``` json
+{
+  "similar":"False","success":true}
+```
+
