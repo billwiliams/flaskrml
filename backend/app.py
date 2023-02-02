@@ -3,6 +3,7 @@ from ner import get_vocab,initialize_model,predict
 from errors import errors
 from sentiment import classifier
 from siamese import * 
+from text_summarization import TransformerLM,greedy_decode
 
 
 
@@ -55,6 +56,25 @@ def similar():
     prediction=predict(statement_one,statement_two,0.96, model, vocab, data_generator=data_generator, verbose=False)
     print(prediction[0][0])
     return  jsonify({"similar":str(prediction[0][0]),
+    'success': True})
+
+@app.route('/summarize',methods=['POST'])
+
+def similar():
+    body = request.get_json()
+
+    article= body.get("article", None)
+    
+
+    # Get the model architecture
+    model = TransformerLM(mode='eval')
+
+    # Load the pre-trained weights
+    model.init_from_file("./models/transformer/model.pkl.gz", weights_only=True)
+    
+    summary=greedy_decode(article, model)
+    
+    return  jsonify({"summary":summary,
     'success': True})
 
 

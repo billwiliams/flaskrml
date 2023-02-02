@@ -10,6 +10,27 @@ import trax
 from trax import layers as tl
 from trax.fastmath import numpy as jnp
 
+def tokenize(input_str, EOS=1):
+    """Input str to features dict, ready for inference"""
+  
+    # Use the trax.data.tokenize method. It takes streams and returns streams,
+    # we get around it by making a 1-element stream with `iter`.
+    inputs =  next(trax.data.tokenize(iter([input_str]),
+                                      vocab_dir='vocab_dir/',
+                                      vocab_file='summarize32k.subword.subwords'))
+    
+    # Mark the end of the sentence with EOS
+    return list(inputs) + [EOS]
+
+def detokenize(integers):
+    """List of ints to str"""
+  
+    s = trax.data.detokenize(integers,
+                             vocab_dir='vocab_dir/',
+                             vocab_file='summarize32k.subword.subwords')
+    
+    return wrapper.fill(s)
+
 def DotProductAttention(query, key, value, mask):
     """Dot product self-attention.
     Args:
@@ -314,3 +335,67 @@ def TransformerLM(vocab_size=33300,
         # Get probabilities with Logsoftmax
         tl.LogSoftmax()
     )
+
+def next_symbol(cur_output_tokens, model):
+    """Returns the next symbol for a given sentence.
+
+    Args:
+        cur_output_tokens (list): tokenized sentence with EOS and PAD tokens at the end.
+        model (trax.layers.combinators.Serial): The transformer model.
+
+    Returns:
+        int: tokenized symbol.
+    """
+    
+    
+    # current output tokens length
+    token_length = len(cur_output_tokens)
+    # calculate the minimum power of 2 big enough to store token_length
+    # HINT: use np.ceil() and np.log2()
+    # add 1 to token_length so np.log2() doesn't receive 0 when token_length is 0
+    padded_length = 2**int(np.ceil(np.log2(token_length + 1)))
+
+    # Fill cur_output_tokens with 0's until it reaches padded_length
+    padded = cur_output_tokens + [0] * (padded_length - token_length)
+    padded_with_batch = np.array(padded)[None, :] # Don't replace this 'None'! This is a way of setting the batch dim
+
+    # model expects a tuple containing two padded tensors (with batch)
+    output, _ = model((padded_with_batch, padded_with_batch))  
+    # HINT: output has shape (1, padded_length, vocab_size)
+    # To get log_probs you need to index output with 0 in the first dim
+    # token_length in the second dim and all of the entries for the last dim.
+    log_probs = output[0, token_length, :]
+    
+    
+    return int(np.argmax(log_probs))
+
+def greedy_decode(input_sentence, model):
+    """Greedy decode function.
+
+    Args:
+        input_sentence (string): a sentence or article.
+        model (trax.layers.combinators.Serial): Transformer model.
+
+    Returns:
+        string: summary of the input.
+    """
+    
+   
+    # Use tokenize()
+    cur_output_tokens = tokenize(input_sentence) + [0]
+    generated_output = [] 
+    cur_output = 0 
+    EOS = 1 
+    
+    while cur_output != EOS:
+        # Get next symbol
+        cur_output = next_symbol(cur_output_tokens, model)
+        # Append next symbol to original sentence
+        cur_output_tokens.append(cur_output)
+        # Append next symbol to generated sentence
+        generated_output.append(cur_output)
+        print(detokenize(generated_output))
+    
+  
+    
+    return detokenize(generated_output)
